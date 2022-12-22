@@ -25,6 +25,7 @@ int main() {
 	std::string a_id = std::to_string(a);
 	const char* id = std::data(a_id);
 	//选取种子文件 ----> 随机的数值固定
+
 	srand((unsigned)time(NULL));
 	WSADATA ver;
 	//加载SOCKET库 ------> 套接字规范
@@ -46,6 +47,7 @@ int main() {
 	char dt[200];
 	char rd[1000];
 	//设备id？
+	char sid[] = { "29" };
 	for (int i = 0; i < 100; i++) {
 		memset(dt, 0, 200);
 		memset(sd, 0, 1000);
