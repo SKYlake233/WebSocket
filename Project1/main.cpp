@@ -20,10 +20,11 @@ void lsend(SOCKET sock, char* sd, int len) {
 
 int main() {
 	int a = 0;
-	printf("请输入B设备的id");
+	printf("请输入B设备的id：\n");
 	scanf("%d", &a);
 	std::string a_id = std::to_string(a);
 	const char* id = std::data(a_id);
+
 	//选取种子文件 ----> 随机的数值固定
 	srand((unsigned)time(NULL));
 	WSADATA ver;
@@ -46,21 +47,21 @@ int main() {
 	char dt[200];
 	char rd[1000];
 	//设备id？
-	for (int i = 0; i < 100; i++) {
+	while (true) {
 		memset(dt, 0, 200);
 		memset(sd, 0, 1000);
 		memset(rd, 0, 1000);
-		//得到温度  
+		//得到温度  [0,50]
 		double temperature = (rand() % 500) / 10.0;
-		//得到湿度值
+		//得到湿度值 [0,1]
 		double humidity = (rand() * 1.0 / RAND_MAX);
 		//得到 pm25  [0,100]
 		int pm25 = (rand() * 100 / RAND_MAX);
 		//得到so2	[0,200]
 		int so2 = (rand() * 20 / RAND_MAX);
-		//得到
+		//得到     [0,100]
 		int no2 = (rand() * 100 / RAND_MAX);
-		//得到co
+		//得到co    [0 , 2]
 		double co = (rand() * 1.0 / RAND_MAX) * 2.0;
 		/*
 		POST /PathLocation/web/setTem.do HTTP/1.1
@@ -71,14 +72,12 @@ int main() {
 
 		{"sid":1001,"temperature":17.5,"humidity":0.75,"illumination":123}
 		*/
-		//得到照度
-		int illumination = rand();
 		//初始化json数据
 		//sprintf(dt, "{\"collectDevice\":%s,\"temperature\":%.1f,\"humidity\":%.2f,\"pm25\":%d,\"so2\":%d,\"no2\":%d,\"co\":%.2f}", sid, temperature, humidity, pm25 , so2 , no2 , co);
 		sprintf(dt, "{\"collectDevice\":%s,\"pm25\":%d,\"so2\":%d,\"no2\":%d,\"co\":%.2f}", id, pm25, so2, no2, co);
 		int dtlen = strlen(dt);
 		//初始化header数据
-		strcpy(sd, "POST /data/upload HTTP/1.1\r\nHost:127.0.0.1:8080\r\nContent-Type: application/json\r\nConnection: keep-alive\r\nContent-Length: ");
+		strcpy(sd, "POST /data/upload HTTP/1.1\r\nHost:182.61.17.49:8080\r\nContent-Type: application/json\r\nConnection: keep-alive\r\nContent-Length: ");
 		int hlen = strlen(sd);
 		char* sdlen = sd + hlen;
 		sprintf(sdlen, "%d\r\n\r\n", dtlen);
